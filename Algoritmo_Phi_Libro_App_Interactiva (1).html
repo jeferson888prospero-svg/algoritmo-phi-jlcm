@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algoritmo Phi: El Reloj Secreto del Trading | Tratado & App Interactiva J.L.C.M.</title>
+    <style>
+        :root {
+            --bg-main: #0b132b;
+            --bg-card: #1c2541;
+            --accent-gold: #f43f5e;
+            --accent-blue: #00f2fe;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0b132b, #1c2541);
+            border-bottom: 2px solid var(--accent-blue);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        main {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        aside {
+            background: #131b2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-blue);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        h2 {
+            color: var(--accent-blue);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 2rem;
+        }
+
+        h3 {
+            color: #ffffff;
+        }
+
+        p, li {
+            text-align: justify;
+            color: var(--text-muted);
+        }
+
+        .equation {
+            background: #0b132b;
+            padding: 1rem;
+            border-left: 4px solid var(--accent-blue);
+            font-family: monospace;
+            color: var(--accent-blue);
+            margin: 1rem 0;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* App Simulator styles */
+        .simulator-box {
+            background: #0f172a;
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .simulator-box h3 {
+            margin-top: 0;
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #ffffff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-calculate {
+            width: 100%;
+            background: linear-gradient(135deg, #00f2fe, #2563eb);
+            color: #0b132b;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-calculate:hover {
+            opacity: 0.9;
+        }
+
+        .results {
+            margin-top: 1.5rem;
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .results p {
+            margin: 6px 0;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .nav-toc {
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-toc li {
+            margin: 8px 0;
+        }
+
+        .nav-toc a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .nav-toc a:hover {
+            text-decoration: underline;
+        }
+
+        .legal-footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+    </style>
+    <script>
+        function calculateJLCM() {
+            const tAcum = parseFloat(document.getElementById('tAcum').value);
+            if (isNaN(tAcum) || tAcum <= 0) {
+                alert('Por favor ingrese un tiempo de acumulación válido.');
+                return;
+            }
+            const phi = 1.6180339887;
+            const tExp = tAcum * phi;
+            const stopQuantum = tExp * (1 / phi); // equivalent to tAcum * 1 = tAcum roughly, or 61.8% of expansion
+            const stopLossTime = tExp * 0.618;
+
+            document.getElementById('resExp').innerText = tExp.toFixed(2) + " minutos";
+            document.getElementById('resStop').innerText = stopLossTime.toFixed(2) + " minutos (Stop Cuántico)";
+        }
+    </script>
+</head>
+<body>
+
+    <header>
+        <h1>Algoritmo Phi: El Reloj Secreto del Trading</h1>
+        <p>Edición Interactiva e Integral | Metodología J.L.C.M. (Ing. Jeferson Leonardo Contreras Maldonado)</p>
+    </header>
+
+    <div class="container">
+        <!-- CONTENIDO DEL LIBRO -->
+        <main>
+            <section id="prologo-psicologico">
+                <h2>Prólogo Psicológico: El Despertar del Código Áureo</h2>
+                <p>Durante años de investigación en sistemas complejos y análisis algorítmico, me enfrenté a una verdad tan incómoda como evidente: el operador financiero y el inversor institucional no son derrotados por la falta de información, sino por la trampa más perfecta jamás diseñada: su propia neurobiología.</p>
+                <p>La génesis de la <strong>Metodología J.L.C.M. (Algoritmo de Compresión Temporal de Contreras)</strong> no nació en un simulador abstracto de precios, sino en la observación clínica y conductual de la masa humana bajo presión de capital. Al trasladar la constante áurea (1.618) del espacio vertical del precio al <strong>eje horizontal del tiempo (X)</strong>, el ruido desapareció. Las gráficas caóticas se transformaron en una malla cristalina y predecible —el <em>Lattice Temporal</em>— donde los puntos de ignición y agotamiento del mercado no se adivinan; se calculan con precisión atómica.</p>
+            </section>
+
+            <section id="prologo-tecnico">
+                <h2>Prólogo Técnico: El Reloj Oculto del Mercado</h2>
+                <p>La inmensa mayoría de los participantes del mercado pierden capital de forma recurrente porque permanecen encadenados a una sola dimensión: el eje vertical del precio. Ignoran una premisa fundamental de la termodinámica financiera: el precio es una variable estrictamente subordinada al tiempo.</p>
+            </section>
+
+            <section id="capitulo-1">
+                <h2>Capítulo I: La Historia Oculta de la Proporción Perfecta</h2>
+                <p>El número áureo no es un artificio humano, sino el principio variacional de mínima acción mediante el cual la materia, la energía y la información se distribuyen en el espacio-tiempo con entropía mínima.</p>
+                <div class="equation">&Phi; = (1 + &radic;5) / 2 &approx; 1.6180339887...</div>
+                <p>La sucesión de Fibonacci <em>F_n = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ...}</em> define que al dividir cualquier término por su predecesor inmediato converge hacia &Phi;.</p>
+            </section>
+
+            <section id="capitulo-2">
+                <h2>Capítulo II: Fundamentos del Cronos Áureo 1.618</h2>
+                <p>La metodología J.L.C.M. efectúa una rotación ortogonal del paradigma técnico: aplica el factor 1.618 sobre el eje horizontal del tiempo (X).</p>
+                <div class="equation">T_{expansión} = T_{acumulación} &times; &Phi; = T_{acumulación} &times; 1.618</div>
+            </section>
+
+            <section id="capitulo-3">
+                <h2>Capítulo III: Taxonomía de Mercados Viables bajo el Factor Phi</h2>
+                <p>Abarca activos tokenizados RWA (Oro Spot PAXG, T-Bills), divisas Forex (EUR/USD, GBP/USD), futuros de índices (S&P 500, Nasdaq 100) y criptoactivos de alta liquidez como Bitcoin, Ethereum y pools AMM en Solana y Base.</p>
+            </section>
+
+            <section id="capitulo-4">
+                <h2>Capítulo IV: Rastreo On-Chain en Redes Descentralizadas</h2>
+                <p>El ecosistema de Solana, respaldado por Proof of History (PoH), permite auditar bloques de capital institucional y ballenas en tiempo real mediante el análisis forense del libro de órdenes distribuido.</p>
+            </section>
+
+            <section id="capitulo-5">
+                <h2>Capítulo V: La Matriz Horaria Transfronteriza J.L.C.M.</h2>
+                <p>Estructuración de ventanas operativas para Wall Street (primeros y últimos 90 minutos), sesiones CEX de Londres y bloques nocturnos de fin de semana en DEX, considerando la cadencia semanal institucional (Lunes de inducción, Martes y Miércoles de vector real).</p>
+            </section>
+
+            <section id="capitulo-6">
+                <h2>Capítulo VI: Guía Operativa y Reglas Áureas</h2>
+                <p><strong>Entrada:</strong> Ruptura de compresión con volumen superior a la EMA(20) y retesteo en el nodo temporal exacto (minuto 3, 5 u 8).<br>
+                <strong>Take-Profit Áureo:</strong> Liquidación al 100% al completarse el tiempo de expansión áurea.<br>
+                <strong>Stop-Loss Cuántico:</strong> Abandono inmediato si transcurre el 61.8% del tiempo sin tracción (&Phi;<sup>-1</sup>).</p>
+            </section>
+
+            <section id="capitulo-7">
+                <h2>Capítulo VII y Epílogo: Simulaciones y Maestría de Ejecución</h2>
+                <p>Casos de estudio reales en Nvidia (NVDA), Apple (AAPL), Bitcoin, Ethereum y memecoins en Solana. El mercado no es un azar; es una estructura matemática cristalina dominada por el Observador Soberano.</p>
+            </section>
+
+            <div class="legal-footer">
+                <p><strong>Metodología J.L.C.M. — Ing. Jeferson Leonardo Contreras Maldonado.</strong><br>
+                Hash de Transacción Génesis (SHA-256): <code>651f11f953d289c1b9287aafb4e56dcdc611ca4e9f3994cec8b4f196fb023902</code></p>
+            </div>
+        </main>
+
+        <!-- APLICACIÓN / CALCULADORA INTERACTIVA INTEGRADA -->
+        <aside>
+            <h2>Herramienta J.L.C.M.</h2>
+            <p style="font-size: 0.85rem;">Calculadora en vivo del Cronos Áureo para determinar la ventana expansiva y el Stop Cuántico.</p>
+            
+            <div class="simulator-box">
+                <h3>Calculadora de Tiempo Phi</h3>
+                <div class="form-group">
+                    <label for="tAcum">Tiempo de Acumulación (min):</label>
+                    <input type="number" id="tAcum" value="8" min="1" step="1">
+                </div>
+                <button class="btn-calculate" onclick="calculateJLCM()">Calcular Ventana J.L.C.M.</button>
+                
+                <div class="results" id="resultsArea">
+                    <p><strong>Expansión Áurea:</strong> <span id="resExp" style="color: var(--accent-blue);">12.94 minutos</span></p>
+                    <p><strong>Stop Cuántico (61.8%):</strong> <span id="resStop" style="color: var(--accent-gold);">8.00 minutos</span></p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 1.5rem; font-size: 1rem;">Índice Rápido</h3>
+            <ul class="nav-toc">
+                <li><a href="#prologo-psicologico">Prólogo Psicológico</a></li>
+                <li><a href="#capitulo-1">Capítulo I: Proporción Perfecta</a></li>
+                <li><a href="#capitulo-2">Capítulo II: Cronos Áureo 1.618</a></li>
+                <li><a href="#capitulo-5">Capítulo V: Matriz Horaria</a></li>
+                <li><a href="#capitulo-6">Capítulo VI: Guía Operativa</a></li>
+                <li><a href="#capitulo-7">Capítulo VII: Casos Prácticos</a></li>
+            </ul>
+        </aside>
+    </div>
+
+</body>
+</html>
